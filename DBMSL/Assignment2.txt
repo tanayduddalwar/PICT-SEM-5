@@ -1,0 +1,48 @@
+-- 4 que
+update employee set  emp_salary=emp_salary*1.1 where emp_joindate<'2015-01-01';
+
+-- 5th que
+delete from dept where location='A1';
+
+--6th 
+select proj_name from project where proj_location='pune';
+
+--7th
+select * from project where proj_cost>65300 and proj_cost<100000;
+
+-- 8th
+select * from project where proj_cost=(select max(proj_cost) from project);
+select avg(proj_cost) as Average_Cost  from project;
+
+--9th
+select * from employee order by emp_lname;
+
+--10th
+SELECT proj_name, proj_cost, proj_location
+    -> FROM project
+    -> WHERE YEAR(proj_year) IN (2004, 2005, 2007);
+
+--4rd largest
+ select * from employee order by emp_salary desc limit 3,1;
+
+
+-- extra queries
+
+-- max salary of every department
+select d.dept_id,nvl(max(e.emp_salary),0) from dept d left join employee e on e.dept_id=d.dept_id group by dept_id;
+
+
+--Query for Average Salary in Departments with More than 2 Employees:
+select employee.dept_id, avg(employee.emp_salary) from dept inner join employee on dept.dept_id=employee.dept_id group by employee.dept_id  having count(employee.emp_id) >2;
+
+--Query for Departments with No Projects:
+select d.dept_id,d.dept_name  from dept d left join project p on d.dept_id=p.dept_id where p.proj_id is NULL ;
+
+--Identify Longest Serving Employee in each department
+select dept_id,emp_id, max(datediff(curdate(),emp_joindate)) from employee group by dept_id;
+
+--department with vag salary greater than avearge salary of all department.
+ SELECT dept_id,avg(emp_salary) FROM employee GROUP BY dept_id HAVING AVG(emp_salary) > (SELECT AVG(emp_salary) FROM employee);
+
+--department having only one employee
+extra queries for assignment one

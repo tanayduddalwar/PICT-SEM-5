@@ -1,0 +1,32 @@
+-- 1st
+ select * from employee cross join dept on employee.dept_id=dept.dept_id;
+
+--2nd
+
+--3rd
+select e1.emp_fname,e1.emp_lname,e1.emp_salary,p2.proj_id,p2.proj_cost from employee e1 inner join project p2 on e1.de
+pt_id=p2.dept_id where p2.proj_location!='pune';
+
+--4th
+select emp_fname,emp_lname,dept_name,emp_position,proj_year from employee natural join dept natural join project where year(proj_year)='2005';
+
+--5th
+select emp_fname,emp_lname,emp_position,dept_name,proj_cost from employee inner join dept on employee.dept_id=dept.dept_id inner join project on dept.dept_id=project.dept_id where proj_cost>100000;
+
+--6th
+select proj_id ,proj_name,proj_year from project where year(proj_year)='2005';
+
+--7th
+ select d1.dept_name from employee e1  inner join dept d1 on e1.dept_id=d1.dept_id group by d1.dept_ID having count(*)>3;
+
+--8th
+select count(*) as Total_Emp_before_2005 from employee e1 inner join dept d1 on e1.dept_id=d1.dept_id inner join project p1 on d1.dept_id=p1.dept_id where year(proj_year)<'2012';
+ 
+--9th
+create view table_view as select emp_fname,emp_lname,emp_salary from employee where emp_salary>'100000';
+
+--10th
+alter view table_view as select emp_joindate from employee;
+delete from table_view where emp_salary='123000';
+drop view table_view;
+

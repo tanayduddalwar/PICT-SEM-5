@@ -1,0 +1,18 @@
+
+-- delete trigger
+DELIMITER // 
+  CREATE TRIGGER after_delete_trigger AFTER DELETE ON N_Library FOR EACH ROW BEGIN
+INSERT INTO O_Library (library_id, name, city, total_books, started) VALUES (OLD.library_id, OLD.name, OLD.city, OLD.total_books, OLD.started);
+END;
+//
+
+--update trigger
+ CREATE TRIGGER after_update_trigger
+    -> AFTER UPDATE ON N_Library
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     -- Insert old values into O_Library after the update
+    ->     INSERT INTO O_Library (library_id, name, city, total_books, started)
+    ->     VALUES (OLD.library_id, OLD.name, OLD.city, OLD.total_books, OLD.started);
+    -> END;
+    -> //

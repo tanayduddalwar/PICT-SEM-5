@@ -1,0 +1,26 @@
+create procedure calculate_marks(in stud_name varchar(30))
+
+begin
+declare stud_marks int;
+declare stud_roll int;
+declare stud_class varchar(30);
+select total_marks into stud_marks from Stud_marks where name=stud_name;
+select roll_no into stud_roll from Stud_marks where name=stud_name;
+
+if stud_marks <= 1500 and stud_marks>=990 then
+  set stud_class = 'Distinction';
+elseif stud_marks <= 989 and stud_marks>=900 then
+  set stud_class = 'First Class';
+elseif stud_marks <= 899 and stud_marks>=825 then
+  set stud_class = 'Higher Second Class';
+elseif stud_marks <= 824 and stud_marks>=725 then
+  set stud_class = 'Second Class';
+elseif stud_marks <= 724 and stud_marks>=500 then
+  set stud_class = 'Third Class';    
+else
+  set stud_class = 'Fail';
+end if;
+
+insert into Result (roll_no,name,Class) values(stud_roll,stud_name,stud_class);
+
+end // 

@@ -1,0 +1,43 @@
+create table n_emp( emp_id int primary key, dept_id int, dept varchar(30), emp_sal int)//
+create table o_emp( emp_id int primary key, dept_id int, dept varchar(30), emp_sal int)//
+
+create procedure emp_data()
+
+begin
+
+-- declaring variables
+declare done int default false;
+declare id int;
+declare d_id int;
+declare d_name varchar(40);
+declare e_sal int;
+
+-- declare cursor
+declare emp_cursor cursor for
+select emp_id,dept_id,dept,emp_sal from n_emp;
+
+-- declare handler for end condition
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+ 
+-- open the cursor 
+OPEN emp_cursor;
+
+-- loop for iterating 
+read_loop:loop
+	fetch emp_cursor into id,d_id,d_name,e_sal;
+	if done then
+	   leave read_loop;
+	end if;	
+
+	if not exists (select 1 from o_emp where emp_id=id) then
+	   insert into o_emp (emp_id, dept_id, dept, emp_sal) 
+	   values(id,d_id,d_name,e_sal);
+	end if; 
+end loop;
+
+-- close cursor
+close emp_cursor;
+
+-- end the procedure
+end //
+

@@ -1,0 +1,63 @@
+DELIMITER //
+
+CREATE PROCEDURE calculate_fine (
+    IN p_roll INT,
+    IN p_name VARCHAR(255)
+)
+BEGIN
+    DECLARE date_issue DATE;
+    DECLARE curr_date DATE DEFAULT '2024-06-01';
+    DECLARE date_diff INT;
+    DECLARE fine_amount INT;
+
+    -- Declare a handler for SQL exceptions
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Rollback any changes and signal an error
+        ROLLBACK;
+        -- You might want to log the error or perform other actions
+        SELECT 'An error occurred while calculating the fine' AS ErrorMessage;
+    END;
+
+    -- Declare a handler for SQL warnings (optional)
+    DECLARE CONTINUE HANDLER FOR SQLWARNING
+    BEGIN
+        -- Handle warnings if necessary
+        -- For this example, we'll just continue
+    END;
+
+    -- Start a transaction
+    START TRANSACTION;
+
+    -- Retrieve the issue date from the borrower table
+    SELECT issue_date INTO date_issue FROM borrower WHERE roll = p_roll;
+
+    -- Check if the borrower exists
+    IF date_issue IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No record found for the given roll number';
+    END IF;
+
+    -- Calculate the difference in days
+    SET date_diff = DATEDIFF(curr_date, date_issue);
+
+    -- Determine the fine amount based on the difference in days
+    IF date_diff < 15 THEN
+        SET fine_amount = 0;
+    ELSEIF date_diff >= 15 AND date_diff < 30 THEN
+        SET fine_amount = 5 * date_diff;
+    ELSE -- date_diff >= 30
+        SET fine_amount = 15 * 5 + (date_diff - 30) * 50;
+    END IF;
+
+    -- Insert into fine table with calculated fine_amount
+    INSERT INTO fine (roll, return_date, fine_amount) VALUES (p_roll, curr_date, fine_amount);
+
+    -- Update borrower status to 'R'
+    UPDATE borrower SET status = 'R' WHERE roll = p_roll;
+
+    -- Commit the transaction
+    COMMIT;
+
+END //
+
+DELIMITER ;
