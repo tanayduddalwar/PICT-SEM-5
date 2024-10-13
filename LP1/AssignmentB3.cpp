@@ -118,9 +118,8 @@ void nextfit(int blocks[], int m, int process[], int n) {
     int processSize[] = {212, 417, 112, 426};
     int m = sizeof(blockSize) / sizeof(blockSize[0]); 
     int n = sizeof(processSize) / sizeof(processSize[0]); 
-  
-  //  firstfit(blockSize, m, processSize, n); 
     bestfit(blockSize, m, processSize, n); 
+  //  firstfit(blockSize, m, processSize, n); 
    // worstfit(blockSize, m, processSize, n);
     //nextfit(blockSize, m, processSize, n);  
     return 0;
