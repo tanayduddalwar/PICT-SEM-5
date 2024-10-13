@@ -50,9 +50,8 @@ int optimalPageReplacement(vector<int> pages, int capacity) {
     vector<int> memory;
     int pageFaults = 0;
     for (size_t i = 0; i < pages.size(); i++) {
-        if (find(memory.begin(), memory.end(), pages[i]) == memory.end()) {
+        if (find(memory.begin(),memory.end(),pages[i]) == memory.end()) {
             if (memory.size() == capacity) {
-                // Find the page to replace
                 int farthest = i + 1;
                 int replaceIdx = -1;
                 for (size_t j = 0; j < memory.size(); j++) {
