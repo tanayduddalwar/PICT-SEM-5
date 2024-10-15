@@ -2,42 +2,42 @@ create table n_emp( emp_id int primary key, dept_id int, dept varchar(30), emp_s
 create table o_emp( emp_id int primary key, dept_id int, dept varchar(30), emp_sal int)//
 
 create procedure emp_data()
+BEGIN
+    DECLARE v_emp_id INT;
+    DECLARE v_emp_name VARCHAR(255);
+    DECLARE v_emp_salary DECIMAL(10, 2);
+    DECLARE done INT DEFAULT 0;
 
-begin
+    -- Declare a cursor to select data from N_Empld
+    DECLARE emp_cursor CURSOR FOR
+    SELECT emp_id, emp_name, emp_salary FROM N_Empld;
 
--- declaring variables
-declare done int default false;
-declare id int;
-declare d_id int;
-declare d_name varchar(40);
-declare e_sal int;
+    -- Declare a handler for when the cursor reaches the end of the result set
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
--- declare cursor
-declare emp_cursor cursor for
-select emp_id,dept_id,dept,emp_sal from n_emp;
+    -- Open the cursor
+    OPEN emp_cursor;
 
--- declare handler for end condition
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
- 
--- open the cursor 
-OPEN emp_cursor;
+    -- Start processing the cursor
+    REPEAT
+        -- Fetch the data from the cursor into variables
+        FETCH emp_cursor INTO v_emp_id, v_emp_name, v_emp_salary;
 
--- loop for iterating 
-read_loop:loop
-	fetch emp_cursor into id,d_id,d_name,e_sal;
-	if done then
-	   leave read_loop;
-	end if;	
+        -- Check if the employee already exists in O_Empld
+        IF NOT done THEN
+            IF NOT EXISTS (SELECT 1 FROM O_Empld WHERE emp_id = v_emp_id) THEN
+                -- Insert into O_Empld if not exists
+                INSERT INTO O_Empld (emp_id, emp_name, emp_salary)
+                VALUES (v_emp_id, v_emp_name, v_emp_salary);
+            END IF;
+        END IF;
 
-	if not exists (select 1 from o_emp where emp_id=id) then
-	   insert into o_emp (emp_id, dept_id, dept, emp_sal) 
-	   values(id,d_id,d_name,e_sal);
-	end if; 
-end loop;
+    UNTIL done END REPEAT;
 
--- close cursor
-close emp_cursor;
+    -- Close the cursor
+    CLOSE emp_cursor;
 
--- end the procedure
-end //
+    -- Commit the transaction
+    COMMIT;
+END //
 
