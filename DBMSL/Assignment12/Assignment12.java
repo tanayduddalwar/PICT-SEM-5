@@ -14,7 +14,7 @@ public class MongoDb {
 
 		// Create a mongo client instance
 		// For Authentication based 
-		// MongoClientURI uri = new MongoClientURI("mongodb://rohan:rohandoshi21@127.0.0.1:27017/?authSource=myDb");
+
 		MongoClientURI uri = new MongoClientURI("mongodb://127.0.0.1:27017");
 		MongoClient mongoClient = new MongoClient(uri);
 
