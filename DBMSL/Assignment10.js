@@ -72,45 +72,40 @@ db.Employee.insertMany([
         salary: 920000
       }
     ]*/    
-
-  db.Employee.find({"fname":"gopal"})
-    /*  [
-        {
-          _id: ObjectId('6713fe6fde25b8570ffe6914'),
-          fname: 'gopal',
-          lname: 'verma',
-          dept: 'Finance',
-          salary: 950000
-        }
+db.Employee.aggregate([{$group:{_id:"$dept","totalsalary":{$sum:"$salary"},"employeecount":{$count:{}}}}]);
+     /* [
+        { _id: 'IT', totalsalary: 1300000, employeecount: 1 },
+        { _id: 'Operations', totalsalary: 920000, employeecount: 1 },
+        { _id: 'Marketing', totalsalary: 780000, employeecount: 1 },
+        { _id: 'Finance', totalsalary: 950000, employeecount: 1 },
+        { _id: 'HR', totalsalary: 850000, employeecount: 1 }
       ]*/
-  db.Employee.find({"salary": {$gte: 1200000}});
-        /*
-        [
-          
+
+        db.Employee.aggregate([{$match:{"fname":"arjun"}}]);
+    /*    [
           {
-            _id: ObjectId('6713fe6fde25b8570ffe6912'),
-            fname: 'ram',
-            lname: 'kumar',
-            dept: 'Consultant',
-            salary: 1200000
-          },
-          {
-            _id: ObjectId('6713fe6fde25b8570ffe6915'),
-            fname: 'krishna',
-            lname: 'nair',
-            dept: 'IT',
-            salary: 1300000
+            _id: ObjectId('6713fe6fde25b8570ffe6917'),
+            fname: 'arjun',
+            lname: 'singh',
+            dept: 'Operations',
+            salary: 920000
           }
-        ]*/
-   db.Employee.updateOne({"fname":"laxmi"},{$set:{"salary":4510000}});
-       /*   {
-            acknowledged: true,
-            insertedId: null,
-            matchedCount: 1,
-            modifiedCount: 1,
-            upsertedCount: 0
-          }*/
-  db.Employee.find({$or:[{"fname":"laxmi"},{"dept":"IT"}]});
+        ]*/    
+       
+  db.Employee.aggregate([{$group:{"_id":"$dept","avg":{$avg:"$salary"}}}]);
+  /*        [
+            { _id: 'IT', avg: 1300000 },
+            { _id: 'Operations', avg: 920000 },
+            { _id: 'Marketing', avg: 780000 },
+            { _id: 'Finance', avg: 950000 },
+            { _id: 'HR', avg: 850000 }
+          ]      
+            */
+  db.Employee.aggregate([{$group:{"_id":"$null","avg":{$avg:"$salary"}}}]);
+  /*[ { _id: null, avg: 960000 } ]*/
+  
+  
+  db.Employee.aggregate([{$skip:2}]);
   /*        [
             {
               _id: ObjectId('6713fe6fde25b8570ffe6915'),
@@ -125,18 +120,27 @@ db.Employee.insertMany([
               lname: 'iyer',
               dept: 'Marketing',
               salary: 780000
+            },
+            {
+              _id: ObjectId('6713fe6fde25b8570ffe6917'),
+              fname: 'arjun',
+              lname: 'singh',
+              dept: 'Operations',
+              salary: 920000
             }
           ]*/
-   db.Employee.find({$and:[{"dept":"IT"},{"salary":{$gte:130000}}]});
-  /*          [
-              {
-                _id: ObjectId('6713fe6fde25b8570ffe6915'),
-                fname: 'krishna',
-                lname: 'nair',
-                dept: 'IT',
-                salary: 1300000
-              }
-            ]*/
 
-              db.Employee.deleteOne({"fname":"laxmi"},{$set:{"salary":4510000}});
-             /* { acknowledged: true, deletedCount: 1 }*/
+            
+      db.Employee.createIndex({"fname":1,"dept":-1});  
+      db.Employee.createIndex({"fname":1});
+     /* fname_1*/
+      db.Employee.find({"fname":"laxmi"}).hint("fname_1")
+/*[
+  {
+    _id: ObjectId('6713fe6fde25b8570ffe6916'),
+    fname: 'laxmi',
+    lname: 'iyer',
+    dept: 'Marketing',
+    salary: 780000
+  }
+]*/
