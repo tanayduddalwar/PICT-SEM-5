@@ -1,52 +1,53 @@
+package v3;
+
+import java.util.*;
+
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.*;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
+import org.bson.Document;
 
-import org.bson.*;
+public class Mongo{
+	public static void main(String[] args){
+		MongoCredential client=new MongoClient("127.0.0.1",27017);
+		System.out.println("Connected to DB");
+		MongoDatabase db=client.getDatabase("31123_db");
+		MongoCollection<Document>collection=db.getCollection("Employee");
+		Scanner sc=new Scanner(System.in);
+		while(true){
+			System.out.println("Menu:");
+            System.out.println("1. Create");
+            System.out.println("2. Read");
+            System.out.println("3. Update");
+            System.out.println("4. Delete");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+			int choice=sc.nextInt();
+			switch(choice){
+				case 1:
+					createdocument(collection,sc);
+				case 2:
+					readDocuments(collection);
+				case 3:
+                    updateDocument(collection, sc);
+                    break;
 
-public class MongoDb {
-	public static void main(String[] args) {
+                case 4:
+                    deleteDocument(collection, sc);
+                    break;
 
-		// Create a mongo client instance
-		// For Authentication based 
-
-		MongoClientURI uri = new MongoClientURI("mongodb://127.0.0.1:27017");
-		MongoClient mongoClient = new MongoClient(uri);
-
-		MongoDatabase database = mongoClient.getDatabase("myDb");
-
-		// If collection is already present gives error
-		database.createCollection("test");
-
-		for (String name : database.listCollectionNames()) {
-			System.out.println(name);
+			}
+			System.out.println("Continue? (y/n): ");
+            String ans = sc.next();
+            if (ans.equals("N") || ans.equals("n"))
+                break;
 		}
-
-		MongoCollection collection = database.getCollection("test");
-
-		// Read
-		FindIterable itf = collection.find();
-
-		MongoCursor it = itf.iterator();
-
-		while (it.hasNext()) {
-			System.out.println(it.next());
-		}
-
-		// Create
-		Document doc = new Document("name", "Tanmya").append("age", 18);
-		collection.insertOne(doc);
-
-		// Update
-		collection.updateOne(Filters.eq("name", "Rohan"), Updates.set("age", 21));
-
-		// Delete
-		collection.deleteMany(Filters.and(Filters.eq("name", "Tanmya"), Filters.eq("age", 18)));
-
+		sc.close();
+		client.close();
 	}
+	System.out.println("Continue? (y/n): ");
+            String ans = sc.next();
+            if (ans.equals("N") || ans.equals("n"))
+                break;
 }
