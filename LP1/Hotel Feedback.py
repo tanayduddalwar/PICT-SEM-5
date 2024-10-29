@@ -18,55 +18,82 @@ class CustomerFeedbackForm:
         self.text_feedback = tk.Text(root, height=5, width=40)
         self.text_feedback.pack(pady=10)
 
-        # Ratings Checkbuttons
-        self.label_ratings = tk.Label(root, text="Rate the food:")
-        self.label_ratings.pack(pady=10)
+        # Quality Section
+        self.quality_frame = tk.Frame(root)
+        self.quality_frame.pack(pady=10)  # Packs vertically
 
-        self.quality_var = tk.IntVar()
-        self.label_quality = tk.Label(root, text="Quality:")
-        self.label_quality.pack()
-        self.checkbutton_quality = tk.Checkbutton(root, text="Excellent", variable=self.quality_var, onvalue=5, offvalue=0)
-        self.checkbutton_quality.pack()
+        self.quality_label = tk.Label(self.quality_frame, text="Quality")
+        self.quality_label.pack(pady=5)
 
-        self.service_var = tk.IntVar()
-        self.label_service = tk.Label(root, text="Service:")
-        self.label_service.pack()
-        self.checkbutton_service = tk.Checkbutton(root, text="Excellent", variable=self.service_var, onvalue=5, offvalue=0)
-        self.checkbutton_service.pack()
+        self.sports_rating = tk.IntVar()
 
-        self.cleanliness_var = tk.IntVar()
-        self.label_cleanliness = tk.Label(root, text="Cleanliness:")
-        self.label_cleanliness.pack()
-        self.checkbutton_cleanliness = tk.Checkbutton(root, text="Excellent", variable=self.cleanliness_var, onvalue=5, offvalue=0)
-        self.checkbutton_cleanliness.pack()
+        self.quality_excellent = tk.Checkbutton(
+            self.quality_frame, text="Excellent", 
+            variable=self.sports_rating, onvalue=5
+        )
+        self.quality_excellent.pack(side=tk.LEFT, padx=5)
+
+        self.quality_good = tk.Checkbutton(
+            self.quality_frame, text="Good", 
+            variable=self.sports_rating, onvalue=4
+        )
+        self.quality_good.pack(side=tk.LEFT, padx=5)
+
+        self.quality_poor = tk.Checkbutton(
+            self.quality_frame, text="Poor", 
+            variable=self.sports_rating, onvalue=3
+        )
+        self.quality_poor.pack(side=tk.LEFT, padx=5)
+
+        # Hygiene Section
+        self.hygiene_frame = tk.Frame(root)
+        self.hygiene_frame.pack(pady=10) 
+         # Below the Quality section
+        self.hygiene_rating = tk.IntVar()
+
+        self.hygiene_label = tk.Label(self.hygiene_frame, text="Hygiene")
+        self.hygiene_label.pack(pady=5)
+
+        self.hygiene_excellent = tk.Checkbutton(
+            self.hygiene_frame, text="Excellent", 
+            variable=self.hygiene_rating, onvalue=5
+        )
+        self.hygiene_excellent.pack(side=tk.LEFT, padx=5)
+
+        self.hygiene_good = tk.Checkbutton(
+            self.hygiene_frame, text="Good", 
+            variable=self.hygiene_rating, onvalue=4
+        )
+        self.hygiene_good.pack(side=tk.LEFT, padx=5)
+
+        self.hygiene_poor = tk.Checkbutton(
+            self.hygiene_frame, text="Poor", 
+            variable=self.hygiene_rating, onvalue=3
+        )
+        self.hygiene_poor.pack(side=tk.LEFT, padx=5)
 
         # Submit Button
-        self.submit_button = tk.Button(root, text="Submit Feedback", command=self.submit_feedback)
-        self.submit_button.pack(pady=20)
+        self.submit_button = tk.Button(root, text="Submit", command=self.submitfunc)
+        self.submit_button.pack(padx=15, pady=10)
 
-    def submit_feedback(self):
-        # Get values from the form
+    def submitfunc(self):
+        # Retrieve values
         name = self.entry_name.get()
-        feedback = self.text_feedback.get("1.0", tk.END).strip()
-        quality_rating = self.quality_var.get()
-        service_rating = self.service_var.get()
-        cleanliness_rating = self.cleanliness_var.get()
+        feedback = self.text_feedback.get("1.0", tk.END)
+          # Get all text from the Text widget
+        quality=self.sports_rating.get()
+        hyg=self.hygiene_rating.get()
 
-        # Validate form entries
-        if not name or not feedback or quality_rating == 0 or service_rating == 0 or cleanliness_rating == 0:
-            messagebox.showerror("Error", "Please fill in all the fields and provide ratings.")
-            return
-
-        # You can add additional logic here, such as saving the feedback to a database
-
-        # Display a confirmation message
-        message = f"Thank you, {name}!\nYour feedback:\n{feedback}\nRatings:\nQuality: {quality_rating}\nService: {service_rating}\nCleanliness: {cleanliness_rating}"
-        messagebox.showinfo("Feedback Submitted", message)
+        # Displaying a message box with the input values
+        messagebox.showinfo(
+            "Feedback Submitted",
+            f"Name: {name}\nFeedback: {feedback}\nQuality: {quality}\nHygiene: {hyg}"
+        )
 
 def main():
     root = tk.Tk()
-    feedback_form = CustomerFeedbackForm(root)
+    feedback = CustomerFeedbackForm(root)
     root.mainloop()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

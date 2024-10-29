@@ -4,6 +4,7 @@ from tkinter import messagebox
 class StudentRegistrationForm:
     def __init__(self, root):
         self.root = root
+        self.root.geometry("400x500")
         self.root.title("Student Registration Form")
 
         # Student Name
@@ -22,7 +23,7 @@ class StudentRegistrationForm:
         self.label_course = tk.Label(root, text="Select Course:")
         self.label_course.pack(pady=10)
         self.courses = ["Math", "Science", "English", "History"]
-        self.selected_course = tk.StringVar()
+       # self.selected_course = tk.StringVar()
         self.course_listbox = tk.Listbox(root, selectmode=tk.SINGLE, height=len(self.courses), exportselection=False)
         for course in self.courses:
             self.course_listbox.insert(tk.END, course)
@@ -35,7 +36,7 @@ class StudentRegistrationForm:
         self.checkbutton_male = tk.Checkbutton(root, text="Male", variable=self.gender_var, onvalue="Male")
         self.checkbutton_female = tk.Checkbutton(root, text="Female", variable=self.gender_var, onvalue="Female")
         self.checkbutton_male.pack()
-        self.checkbutton_female.pack()
+        self.checkbutton_female.pack()  
 
         # Submit Button
         self.submit_button = tk.Button(root, text="Submit", command=self.submit_form)
