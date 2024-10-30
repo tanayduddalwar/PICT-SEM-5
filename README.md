@@ -51,7 +51,7 @@ LP1 includes assignments from two subjects: System Programming and Operating Sys
 8. **Assignment 8:** Implementation of Process Scheduling Algorithms
 9. **Assignment 9:** Implementation of Memory Management Techniques
 
-### Human Computer Interface (DS)
+### Human Computer Interface (HCI)
 
 1. **Assignment 1:** Design a paper prototype for selected Graphical User Interface(Login and Signup Screen). 
 2. **Assignment 2:** Implement GOMS (Goals, Operators, Methods and Selection rules) 04 Oct 2024 
