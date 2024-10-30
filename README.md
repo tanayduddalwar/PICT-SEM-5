@@ -51,12 +51,11 @@ LP1 includes assignments from two subjects: System Programming and Operating Sys
 8. **Assignment 8:** Implementation of Process Scheduling Algorithms
 9. **Assignment 9:** Implementation of Memory Management Techniques
 
-### Distributed Systems (DS)
+### Human Computer Interface (DS)
 
-1. **Assignment 1:** Study of Distributed System Architecture
-2. **Assignment 2:** Implementation of Remote Procedure Call (RPC)
-3. **Assignment 3:** Distributed Mutual Exclusion Algorithms
-4. **Assignment 4:** Implementation of Distributed Deadlock Detection Algorithm
-5. **Assignment 5:** Study of Distributed File Systems
-6. **Assignment 6:** Implementation of Clock Synchronization Algorithms
-7. **Assignment 7:** Case Study on Distributed Databases
+1. **Assignment 1:** Design a paper prototype for selected Graphical User Interface(Login and Signup Screen). 
+2. **Assignment 2:** Implement GOMS (Goals, Operators, Methods and Selection rules) 04 Oct 2024 
+modeling technique to model user's behavior in given scenario(Calculator Interface). 
+3. **Assignment 3:** Design a User Interface in Python(Course Selection Interface). 
+4. **Assignment 4:** To redesign existing Graphical User Interface with screen complexity(Feedback Interface).
+
