@@ -4,7 +4,7 @@ This repository contains all the assignments for the fifth semester of the Compu
 
 ## Table of Contents
 
-- [Computer Networks (CN)]
+- [Computer Networks (CN)](#computer-networks-cn)
 - [Database Management Systems (DBMS)](#database-management-systems-dbms)
 - [Laboratory Practice 1 (LP1)](#laboratory-practice-1-lp1)
 
