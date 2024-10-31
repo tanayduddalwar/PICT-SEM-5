@@ -69,6 +69,10 @@ var reduceFunction = function(productId, values) {
 
 
 /*using aggregation as mapreduce is depricated*/
+
+db.Products.aggregate([{$group:{_id:"$product_name",total_price:{$sum:{$multiply:["$quantity","$price"]}}}}]);
+
+
 db.Employee.aggregate([
    {
      $project: {
