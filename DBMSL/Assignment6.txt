@@ -41,3 +41,9 @@ BEGIN
     COMMIT;
 END //
 
+--Steps
+--1.Declare Cursor
+--2. Open Cursor
+--3. Fetch Cursor
+--4. close cursor
+
