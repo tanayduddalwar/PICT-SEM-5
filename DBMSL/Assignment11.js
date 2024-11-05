@@ -66,7 +66,46 @@ var mapFunction = function() {
 var reduceFunction = function(productId, values) {
   return Array.sum(values); // Sum the values for each product_id
 };
+/*for array entries*/
+ db.Items.insertMany([
+...     {
+...         category: "Electronics",
+...         price: [80000, 56000, 2000, 15000, 30000, 120000, 45000, 67000, 52000, 39000]
+...     },
+...     {
+...         category: "Furniture",
+...         price: [25000, 18000, 35000, 42000, 15000, 27000, 49000, 32000]
+...     },
+...     {
+...         category: "Clothing",
+...         price: [2000, 3000, 1500, 2500, 4000, 3500, 1000, 1200, 2200]
+...     },
+...     {
+...         category: "Books",
+...         price: [500, 1500, 800, 200, 300, 600, 1000, 700]
+...     }
+... ]);
+var mapFunction = function() {
+    if (Array.isArray(this.price)) {
+        this.price.forEach(price => emit(this.category, price));
+    }
+};
 
+var reduceFunction = function(key, values) {
+    var sum = 0;
+    for (var i = 0; i < values.length; i++) {
+        sum += values[i];
+    }
+    return sum / values.length; // Calculate average for each category
+};
+
+db.Items.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {
+        out: "average_category_prices"
+    }
+);
 
 /*using aggregation as mapreduce is depricated*/
 
