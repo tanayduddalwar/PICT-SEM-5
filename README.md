@@ -54,7 +54,7 @@ LP1 includes assignments from two subjects: System Programming and Operating Sys
 ### Human Computer Interface (HCI)
 
 1. **Assignment 1:** Design a paper prototype for selected Graphical User Interface(Login and Signup Screen). 
-2. **Assignment 2:** Implement GOMS (Goals, Operators, Methods and Selection rules) 04 Oct 2024 
+2. **Assignment 2:** Implement GOMS (Goals, Operators, Methods and Selection rules)
 modeling technique to model user's behavior in given scenario(Calculator Interface). 
 3. **Assignment 3:** Design a User Interface in Python(Course Selection Interface). 
 4. **Assignment 4:** To redesign existing Graphical User Interface with screen complexity(Feedback Interface).
