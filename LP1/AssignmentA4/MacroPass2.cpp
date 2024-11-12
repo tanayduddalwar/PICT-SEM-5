@@ -110,7 +110,7 @@ int main() {
                 getline(iss, value);
                 apt[aptinverse[name]] = value;
             }
-
+            
             // Expanding the Macro
             int i = mdtp - 1;
             while (mdt[i] != "MEND") {

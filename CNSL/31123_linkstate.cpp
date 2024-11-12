@@ -7,8 +7,6 @@
 using namespace std;
 
 const int INF = numeric_limits<int>::max();
-
-
 void dijkstra(int src, int n, vector<vector<pair<int, int>>>& adj, vector<int>& dist, vector<int>& prev) {
     dist.assign(n, INF);
     prev.assign(n, -1);

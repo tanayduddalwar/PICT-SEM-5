@@ -41,10 +41,6 @@ class SignUpWindow:
         if not name or not email or not password:
             messagebox.showerror("Error", "Please fill in all the fields.")
             return
-
-        # You can add additional logic here, such as saving the user information to a database
-
-        # Display a confirmation message
         message = f"Sign Up Successful!\nName: {name}\nEmail: {email}"
         messagebox.showinfo("Success", message)
 

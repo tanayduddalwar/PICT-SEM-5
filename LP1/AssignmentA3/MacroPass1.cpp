@@ -58,7 +58,7 @@ int main()
                 parts.push_back(part);
             }
 
-            Macroname = parts[0]; // Save macro name
+            Macroname = parts[0]; // Save macro name            
 
             // Write to MNT (Macro Name Table)
             mntFile << Macroname << "\t" << pp << "\t" << kp << "\t"
@@ -146,10 +146,12 @@ int main()
     return 0;
 }
 /*
+
 1.  split the lines into words and store it in parts vector
 2.  if parts is empty then continue
 3. if parts[0]==MACRO then clear the parts first and then store again in parts the splitted words  amd write macroname and pointers in mnt then chekc got & and , if present remove them form input then chekc for = sign if present add this entry in pntab and write in kpdtab increase kp pointer
 4. if parts[0]=MEND then write to mdt file and reinitialize all variables to default and then write to pp file and clear the pntab
 5. else if(flag==1) then run loop over parts and find & and , if present remove them  else make entry in mdttable increase the mdp pointer
 6. Close all the files
+
 */

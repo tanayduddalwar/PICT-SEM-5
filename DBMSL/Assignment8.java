@@ -3,7 +3,7 @@ package assign8;
 import java.sql.*;
 import java.util.*;
 
-public class java_connectivity {
+public class Assignment8 {
     public static void main(String[] args) {
         try {
             // Load the MySQL driver
