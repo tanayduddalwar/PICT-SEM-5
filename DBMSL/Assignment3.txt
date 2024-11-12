@@ -2,6 +2,13 @@
  select * from employee cross join dept on employee.dept_id=dept.dept_id;
 
 --2nd
+SELECT e1.emp_fname AS Employee1, e2.emp_fname AS Employee2, 
+       e1.emp_position, d.dept_loc, e1.emp_joindate, e1.dept_id
+FROM Employee e1
+INNER JOIN Employee e2 ON e1.dept_id = e2.dept_id 
+                       AND e1.emp_id < e2.emp_id
+INNER JOIN dept d ON e1.dept_id = d.dept_id;
+
 
 --3rd
 select e1.emp_fname,e1.emp_lname,e1.emp_salary,p2.proj_id,p2.proj_cost from employee e1 inner join project p2 on e1.de
