@@ -23,10 +23,6 @@ public:
     }
 };
 
-void removechar(string &str, char ch) {
-    str.erase(remove(str.begin(), str.end(), ch), str.end());
-}
-
 int main() {
     unordered_map<string, MNTTAB> mnt;
     unordered_map<string, int> aptinverse;
@@ -42,106 +38,105 @@ int main() {
     vector<string> kptab;
     string line;
     int pp, kp, mdtp, kpdtp, paramNo;
-
-    // Reading MDT file
-    while (getline(mdtfile, line)) {
-        mdt.push_back(line);
-    }
-
     // Reading KPDT file
     while (getline(kpfile, line)) {
-        kptab.push_back(line);
+        kptab.push_back(line);  // Corrected: kpdt -> kptab to match the variable declared for KPDT storage.
     }
-
-    // Reading MNT file
+    
+    // Reading MDT file
+    while (getline(mdtfile, line)) {
+        mdt.push_back(line);  // Corrected: mdtfile -> mdt, as `mdt` is where lines should be stored.
+    }
+    
+    // Reading MNT file and storing it in mnt map
     while (getline(mntfile, line)) {
-        istringstream iss(line);
-        string name;
         int pp, kp, mdtp, kpdtp;
+        string name;
+
+        istringstream iss(line);
         iss >> name >> pp >> kp >> mdtp >> kpdtp;
-        mnt[name] = MNTTAB(pp, kp, mdtp, kpdtp, name);
+        mnt[name] = MNTTAB(pp, kp, mdtp, kpdtp, name);  // Corrected: `MNT` -> `MNTTAB`, matching the class name.
     }
 
-    // Reading Intermediate File
-    while (getline(in, line)) {
-        istringstream iss(line);
+    int parano;
+    // Reading the intermediate file
+    while (getline(in, line)) {  // Corrected: `interfile` -> `in`, matching the ifstream variable for intermediate file.
         vector<string> parts;
         string part;
-
+        istringstream iss(line);
         while (iss >> part) {
             parts.push_back(part);
         }
 
+        // Check if the macro name is in the MNT
         if (mnt.find(parts[0]) != mnt.end()) {
             MNTTAB entry = mnt[parts[0]];
             pp = entry.pp;
             kp = entry.kp;
             mdtp = entry.mdtp;
             kpdtp = entry.kptp;
-            paramNo = 1;
+            parano = 1;
 
-            // Processing Positional Parameters
-            for (int i = 0; i < pp; ++i) {
-                removechar(parts[paramNo], ',');
-                apt[paramNo] = parts[paramNo];
-                aptinverse[parts[paramNo]] = paramNo;
-                paramNo++;
+            // Handling positional parameters
+            for (int i = 0; i < pp; i++) {
+                parts[parano].erase(remove(parts[parano].begin(), parts[parano].end(), ','), parts[parano].end());
+                apt[parano] = parts[parano];
+                aptinverse[parts[parano]] = parano;
+                parano++;
             }
 
-            // Processing Keyword Parameters
+            // Handling keyword parameters
             int j = kpdtp - 1;
-            for (int i = 0; i < kp; ++i) {
-                istringstream iss(kptab[j]);
+            for (int i = 0; i < kp; i++) {
                 string key, value;
+                istringstream iss(kptab[j]);  // Corrected: `kpdt` -> `kptab`, matching KPDT storage.
                 iss >> key >> value;
-                apt[paramNo] = value;
-                aptinverse[key] = paramNo;
-                paramNo++;
+                apt[parano] = value;
+                aptinverse[key] = parano;
+                parano++;
                 j++;
             }
 
-            // Overriding Keyword Parameters
-            for (int i = pp + 1; i < parts.size(); ++i) {
-                removechar(parts[i], ',');
+            // Handling parameters in the form of `key=value`
+            for (int i = pp + 1; i < parts.size(); i++) {
+                parts[i].erase(remove(parts[i].begin(), parts[i].end(), ','), parts[i].end());  // Corrected: `start()` -> `begin()`
                 istringstream iss(parts[i]);
-                string name, value;
-                getline(iss, name, '=');
-                removechar(name, '&');
+                string key, value;
+                getline(iss, key, '=');
                 getline(iss, value);
-                apt[aptinverse[name]] = value;
+                value.erase(remove(value.begin(), value.end(), ','), value.end());
+                apt[aptinverse[key]] = value;
             }
-            
-            // Expanding the Macro
+
+            // Expanding macro definition using MDT entries
             int i = mdtp - 1;
             while (mdt[i] != "MEND") {
                 istringstream iss(mdt[i]);
                 vector<string> parts;
-                string word;
-
-                while (iss >> word) {
-                    parts.push_back(word);
+                string part;
+                while (iss >> part) {
+                    parts.push_back(part);
                 }
-
                 pass2 << "+";
-                for (const string &s : parts) {
-                    if (s.find("(P,") != string::npos) {
-                        string num = s.substr(s.find(",") + 1);
-                        removechar(num, ')');
+                for (int i = 0; i < parts.size(); i++) {
+                    if (parts[i].find("(P,") != string::npos) {
+                        string num = parts[i].substr(parts[i].find("(P,") + 3);  // Corrected indexing for `(P,` extraction.
+                        num.erase(remove(num.begin(), num.end(), ')'), num.end());
                         int paraidx = stoi(num);
                         pass2 << apt[paraidx] << "\t";
                     } else {
-                        pass2 << s << "\t";
+                        pass2 << parts[i] << "\t";
                     }
                 }
                 pass2 << "\n";
                 i++;
             }
 
-            // Clear Parameter Tables
+            // Clearing APT tables for next macro expansion
             apt.clear();
             aptinverse.clear();
         } else {
-            pass2 << line << "\n";
+            pass2 << line << "\n";  // Copy non-macro lines directly
         }
     }
 
@@ -154,20 +149,3 @@ int main() {
 
     return 0;
 }
-
-/*
-Steps:
-1.Create MNT CLASS 
-2.Create Unordered map of mnt and vector of kpdtp and mdt
-3.Read MDT file
-4.Read KPDT File 
-5.Read MNT File and store this in mnt map
-6. Read intermediate File
-7. Read Positional parameters first and add it in ap and apinverse map with parano
-8. then add kptab parameters and add it in ap and apinverse map 
-9. then from pp+1 to parts.size() run loop and add it to ap map
-10. 
-
-
-
-*/

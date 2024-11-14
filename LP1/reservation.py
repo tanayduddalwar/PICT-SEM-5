@@ -48,8 +48,6 @@ def reserve_ticket(root):
     nam=self.name_entry.get()
     classtype=self.var.get()
 
-    
-
 
 
 
